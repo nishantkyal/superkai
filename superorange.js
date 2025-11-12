@@ -365,7 +365,7 @@ document.addEventListener('click', function(event) {
   if (!button) return; // Exit if not a button
 
   // Extract aria-label
-  const ariaLabel = button.getAttribute('aria-label');
+  const ariaLabel = button.getAttribute('aria-label') || button.textContent.replaceAll("\n", "").trim();
   if (!ariaLabel) return; // Exit if no aria-label
 
   // Send GA4 event
