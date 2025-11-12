@@ -351,3 +351,13 @@
   console.log('[GB] DOM change observer initialized');
 
 })();
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D4T9P5QTFH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D4T9P5QTFH');
+</script>
