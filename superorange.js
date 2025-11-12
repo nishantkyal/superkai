@@ -357,3 +357,23 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 
 gtag('config', 'G-D4T9P5QTFH');
+
+// Event delegation for button clicks
+document.addEventListener('click', function(event) {
+  // Check if clicked element is a button or has role="button"
+  const button = event.target.closest('button, [role="button"]');
+  if (!button) return; // Exit if not a button
+
+  // Extract aria-label
+  const ariaLabel = button.getAttribute('aria-label');
+  if (!ariaLabel) return; // Exit if no aria-label
+
+  // Send GA4 event
+  gtag('event', 'button_click', {
+    button_label: ariaLabel,  // Custom parameter (register as custom dimension in GA4 if needed)
+    event_category: 'UI Interaction',  // Optional: For legacy UA compatibility
+    event_label: ariaLabel    // Optional: For legacy UA
+  });
+
+  console.log(`Button clicked: ${ariaLabel}`);  // Optional: For debugging
+}, false);
