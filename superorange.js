@@ -113,7 +113,13 @@
   // Handler for 'image-format' flag
   function handleImageFormat(value) {
     console.log("[GB] 'image-format' => value:", value);
+    
     if (value) {
+      document.querySelectorAll(".splide__list").forEach(e => {
+        if (e.id.includes("template")) {
+          e.style.setProperty("height", "533px", "important");
+        }
+      });;
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
     } else {
       console.log('No filter value: showing all images');
@@ -335,7 +341,7 @@
       clearTimeout(domChangeTimeout);
       domChangeTimeout = setTimeout(function () {
         console.log('[GB] DOM changes detected, re-evaluating flags');
-        evaluateFlag('dom-change');
+        // evaluateFlag('dom-change');
       }, 300); // Wait 300ms after last change
     }
   });
@@ -369,7 +375,7 @@ document.addEventListener('click', function(event) {
   if (!ariaLabel) return; // Exit if no aria-label
 
   // Send GA4 event
-  gtag('event', 'button_click', {
+  gtag('event', `button_click_${ariaLabel}`, {
     button_label: ariaLabel,  // Custom parameter (register as custom dimension in GA4 if needed)
     event_category: 'UI Interaction',  // Optional: For legacy UA compatibility
     event_label: ariaLabel    // Optional: For legacy UA
