@@ -59,8 +59,6 @@
     var container = img.closest('button[aria-label="Image zoom"]');
     if (container && container.parentNode) {
       container.parentNode.removeChild(container);
-    } else if (img && img.parentNode) {
-      img.parentNode.removeChild(img);
     }
   }
 
