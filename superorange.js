@@ -111,12 +111,21 @@
 
   // Helper function to check if any images contain "kai_" in their alt text
   function hasAnyKaiImages() {
-    var scope = document.querySelector('[data-product], main, [role="main"]') || document;
-    var imgs = scope.querySelectorAll('img');
-    for (var i = 0; i < imgs.length; i++) {
-      var alt = (imgs[i].getAttribute('alt') || '').trim();
-      if (alt.indexOf('kai_') !== -1) {
-        return true;
+    // Find the first .product-media-container that contains a button with aria-label="Image Zoom"
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
+    for (var i = 0; i < productMediaContainers.length; i++) {
+      var container = productMediaContainers[i];
+      var zoomButton = container.querySelector('button[aria-label="Image Zoom"]');
+      if (zoomButton) {
+        // Check images within this container
+        var imgs = container.querySelectorAll('img');
+        for (var j = 0; j < imgs.length; j++) {
+          var alt = (imgs[j].getAttribute('alt') || '').trim();
+          if (alt.indexOf('kai_') !== -1) {
+            return true;
+          }
+        }
+        break; // Only check the first matching container
       }
     }
     return false;
