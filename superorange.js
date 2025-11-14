@@ -56,7 +56,7 @@
   }
 
   function removeElementContainerForImage(img) {
-    var container = img.closest('.product-media-container');
+    var container = img.closest('button[aria-label="Image zoom"]');
     if (container && container.parentNode) {
       container.parentNode.removeChild(container);
     } else if (img && img.parentNode) {
