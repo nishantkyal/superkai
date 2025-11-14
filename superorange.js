@@ -56,7 +56,7 @@
   }
 
   function removeElementContainerForImage(img) {
-    if (img.parentNode && img.parentNode) {
+    if (img && img.parentNode) {
       img.parentNode.removeChild(img);
     }
   }
