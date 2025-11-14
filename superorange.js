@@ -111,11 +111,11 @@
 
   // Helper function to check if any images contain "kai_" in their alt text
   function hasAnyKaiImages() {
-    // Find all .product-media-container that contain a button with aria-label="Image Zoom"
+    // Find all .product-media-container that contain a button with aria-label="Image zoom"
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
-      var zoomButtons = container.querySelectorAll('button[aria-label="Image Zoom"]');
+      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
       if (zoomButtons.length > 0) {
         // Check images within this container
         var imgs = container.querySelectorAll('img');
@@ -143,18 +143,18 @@
     }
     
     if (value) {
-      // Find all .product-media-container that contain a button with aria-label="Image Zoom"
+      // Find all .product-media-container that contain a button with aria-label="Image zoom"
       var productMediaContainers = document.querySelectorAll('.product-media-container');
       for (var i = 0; i < productMediaContainers.length; i++) {
         var container = productMediaContainers[i];
-        var zoomButtons = container.querySelectorAll('button[aria-label="Image Zoom"]');
+        var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         if (zoomButtons.length > 0) {
           // Resize images within this container
           var images = container.querySelectorAll('img');
           images.forEach(function(img) {
             img.style.setProperty("height", "533px", "important");
           });
-          console.log('Resized', images.length, 'images in product-media-container with Image Zoom button(s)');
+          console.log('Resized', images.length, 'images in product-media-container with Image zoom button(s)');
         }
       }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
