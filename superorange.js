@@ -111,7 +111,7 @@
 
   // Helper function to check if any images contain "kai_" in their alt text
   function hasAnyKaiImages() {
-    // Find the first .product-media-container that contains a button with aria-label="Image Zoom"
+    // Find all .product-media-container that contain a button with aria-label="Image Zoom"
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
@@ -125,7 +125,6 @@
             return true;
           }
         }
-        break; // Only check the first matching container
       }
     }
     return false;
