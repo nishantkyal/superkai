@@ -135,11 +135,21 @@
     }
     
     if (value) {
-      document.querySelectorAll(".splide__list").forEach(e => {
-        if (e.id.includes("template")) {
-          e.style.setProperty("height", "533px", "important");
+      // Find the first .product-media-container that contains a button with aria-label="Image Zoom"
+      var productMediaContainers = document.querySelectorAll('.product-media-container');
+      for (var i = 0; i < productMediaContainers.length; i++) {
+        var container = productMediaContainers[i];
+        var zoomButton = container.querySelector('button[aria-label="Image Zoom"]');
+        if (zoomButton) {
+          // Resize images within this container
+          var images = container.querySelectorAll('img');
+          images.forEach(function(img) {
+            img.style.setProperty("height", "533px", "important");
+          });
+          console.log('Resized', images.length, 'images in first product-media-container with Image Zoom button');
+          break; // Only process the first matching container
         }
-      });;
+      }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
     } else {
       console.log('No filter value: showing all images');
