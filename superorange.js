@@ -4,9 +4,9 @@
   // Hide images until we decide what to keep
   try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
   function shouldShowImageByAlt(img, flagValue) {
-    if (!flagValue) return true; // Show all if no flag value
+    if (!flagValue || flagValue === 'none') return true; // Show all if no flag value or flag value is "none"
     var alt = (img.getAttribute('alt') || '').trim();
-    return alt.indexOf('kai_') == -1 || alt.indexOf('kai_' + flagValue) !== -1; // Check if alt text contains flag value
+    return alt.indexOf('kai_' + flagValue) !== -1; // Check if alt text contains flag value
   }
 
   // Prune entire gallery slides/thumbnails (Dawn-style) so layout/counts match
@@ -109,10 +109,30 @@
     return observer;
   }
 
+  // Helper function to check if any images contain "kai_" in their alt text
+  function hasAnyKaiImages() {
+    var scope = document.querySelector('[data-product], main, [role="main"]') || document;
+    var imgs = scope.querySelectorAll('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var alt = (imgs[i].getAttribute('alt') || '').trim();
+      if (alt.indexOf('kai_') !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Flag handlers - moved to root level
   // Handler for 'image-format' flag
   function handleImageFormat(value) {
     console.log("[GB] 'image-format' => value:", value);
+    
+    // Don't filter if flag value is "none" or if no images contain "kai_"
+    if (value === 'none' || !hasAnyKaiImages()) {
+      console.log('Skipping filter: flag value is "none" or no images contain "kai_"');
+      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
+      return;
+    }
     
     if (value) {
       document.querySelectorAll(".splide__list").forEach(e => {
