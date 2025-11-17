@@ -331,7 +331,7 @@
     }
     
     // Don't filter if flag value is "none" or if no images contain "kai_"
-    if (value === 'none' || !hasAnyKaiImages()) {
+    if (value.toLowerCase() === 'none' || !hasAnyKaiImages()) {
       console.log('Skipping filter: flag value is "none" or no images contain "kai_"');
       try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
       return;
