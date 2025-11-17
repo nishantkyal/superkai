@@ -71,24 +71,120 @@
     }
   }
 
-  function filterProductImages(flagValue) {
+  // Collect indices of images that should be removed based on flag value
+  function collectImageIndicesToRemove(flagValue) {
+    var indicesToRemove = [];
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
     var productMediaContainers = document.querySelectorAll('.product-media-container');
-    var kept = 0, hidden = 0;
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
       var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
       if (zoomButtons.length > 0) {
-        // Filter images within this container
+        // Collect images and their indices
         var imgs = container.querySelectorAll('img');
-        imgs.forEach(function (img) {
-          var shouldKeep = shouldShowImageByAlt(img, flagValue);
-          if (shouldKeep) { kept++; return; }
-          removeElementContainerForImage(img);
-          hidden++;
-        });
+        for (var j = 0; j < imgs.length; j++) {
+          var shouldKeep = shouldShowImageByAlt(imgs[j], flagValue);
+          if (!shouldKeep) {
+            indicesToRemove.push(j);
+          }
+        }
+        // Only process the first container that matches
+        break;
       }
     }
+    return indicesToRemove;
+  }
+
+  // Placeholder: Remove images from thumbnails by index
+  // TODO: Add CSS selector for thumbnails
+  function removeFromThumbnails(indicesToRemove) {
+    // Select thumbnails within .splide-image elements
+    var thumbnails = document.querySelectorAll(".splide-image .media-thumbnail");
+    if (!thumbnails || thumbnails.length === 0) {
+      console.log('[GB] removeFromThumbnails: no thumbnails found');
+      return;
+    }
+    // TODO: Implement removal logic based on indices
+    // Remove items in reverse order to maintain correct indices
+    indicesToRemove.sort(function(a, b) { return b - a; });
+    indicesToRemove.forEach(function(index) {
+      if (thumbnails[index] && thumbnails[index].parentNode) {
+        thumbnails[index].parentNode.removeChild(thumbnails[index]);
+      }
+    });
+    console.log('[GB] removeFromThumbnails: removed', indicesToRemove.length, 'items');
+  }
+
+  // Placeholder: Remove images from main product gallery by index
+  // TODO: Add CSS selector for main product gallery
+  function removeFromMainGallery(indicesToRemove) {
+    // TODO: Replace with actual CSS selector for main product gallery
+    var gallerySelector = ''; // TODO: Add CSS selector for main product gallery
+    if (!gallerySelector) {
+      console.log('[GB] removeFromMainGallery: selector not yet configured');
+      return;
+    }
+    var galleryItems = document.querySelectorAll(gallerySelector);
+    // TODO: Implement removal logic based on indices
+    // Remove items in reverse order to maintain correct indices
+    indicesToRemove.sort(function(a, b) { return b - a; });
+    indicesToRemove.forEach(function(index) {
+      if (galleryItems[index] && galleryItems[index].parentNode) {
+        galleryItems[index].parentNode.removeChild(galleryItems[index]);
+      }
+    });
+    console.log('[GB] removeFromMainGallery: removed', indicesToRemove.length, 'items');
+  }
+
+  // Placeholder: Remove images from zoomed in view by index
+  // TODO: Add CSS selector for zoomed in view
+  function removeFromZoomedView(indicesToRemove) {
+    // TODO: Replace with actual CSS selector for zoomed in view
+    var zoomedSelector = ''; // TODO: Add CSS selector for zoomed in view
+    if (!zoomedSelector) {
+      console.log('[GB] removeFromZoomedView: selector not yet configured');
+      return;
+    }
+    var zoomedItems = document.querySelectorAll(zoomedSelector);
+    // TODO: Implement removal logic based on indices
+    // Remove items in reverse order to maintain correct indices
+    indicesToRemove.sort(function(a, b) { return b - a; });
+    indicesToRemove.forEach(function(index) {
+      if (zoomedItems[index] && zoomedItems[index].parentNode) {
+        zoomedItems[index].parentNode.removeChild(zoomedItems[index]);
+      }
+    });
+    console.log('[GB] removeFromZoomedView: removed', indicesToRemove.length, 'items');
+  }
+
+  function filterProductImages(flagValue) {
+    // Collect indices of images to remove first
+    var indicesToRemove = collectImageIndicesToRemove(flagValue);
+    
+    if (indicesToRemove.length === 0) {
+      console.log('[GB] filterProductImages: no images to remove');
+      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
+      return;
+    }
+
+    // Remove from all three places
+    removeFromThumbnails(indicesToRemove);
+    removeFromMainGallery(indicesToRemove);
+    removeFromZoomedView(indicesToRemove);
+
+    var kept = 0, hidden = indicesToRemove.length;
+    // Find all .product-media-container that contain a button with aria-label="Image zoom"
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
+    for (var i = 0; i < productMediaContainers.length; i++) {
+      var container = productMediaContainers[i];
+      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+      if (zoomButtons.length > 0) {
+        var imgs = container.querySelectorAll('img');
+        kept = imgs.length - hidden;
+        break;
+      }
+    }
+    
     console.log('[GB] filterProductImages: kept', kept, 'hidden', hidden, 'filter value:', flagValue);
     try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
   }
