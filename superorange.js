@@ -358,9 +358,9 @@
       console.log('No filter value: showing all images');
     }
     // Prune high-level gallery slides first so layout counts are correct
-    pruneDawnGalleries(value);
+    //pruneDawnGalleries(value);
     filterProductImages(value);
-    observeDynamicImages(value);
+    //observeDynamicImages(value);
   }
 
   function handleCartLabel(value) {
