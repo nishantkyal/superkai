@@ -1,7 +1,7 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
-  document.documentElement.classList.add('hidden');
+  //document.documentElement.classList.add('hidden');
 
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
