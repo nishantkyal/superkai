@@ -4,7 +4,7 @@
   // Hide images until we decide what to keep
   try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
   function shouldShowImageByAlt(img, flagValue) {
-    if (!flagValue || flagValue === 'none') return true; // Show all if no flag value or flag value is "none"
+    if (!flagValue || flagValue.toLowerCase() === 'none') return true; // Show all if no flag value or flag value is "none"
     var alt = (img.getAttribute('alt') || '').trim();
     return alt.indexOf('kai_' + flagValue) !== -1; // Check if alt text contains flag value
   }
