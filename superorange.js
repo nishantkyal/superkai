@@ -161,21 +161,19 @@
   // TODO: Add CSS selector for zoomed in view
   function removeFromZoomedView(indicesToRemove) {
     // TODO: Replace with actual CSS selector for zoomed in view
-    var zoomedSelector = ''; // TODO: Add CSS selector for zoomed in view
+    var zoomedSelector = 'div[aria-label="Media Gallery" img]'; // TODO: Add CSS selector for zoomed in view
     if (!zoomedSelector) {
       console.log('[GB] removeFromZoomedView: selector not yet configured');
       return;
     }
-    var zoomedItems = document.querySelectorAll(zoomedSelector);
-    // TODO: Implement removal logic based on indices
-    // Remove items in reverse order to maintain correct indices
-    indicesToRemove.sort(function(a, b) { return b - a; });
+    var zoomedImages = document.querySelectorAll(zoomedSelector);
+    // Hide items based on indices
     indicesToRemove.forEach(function(index) {
-      if (zoomedItems[index] && zoomedItems[index].parentNode) {
-        zoomedItems[index].parentNode.removeChild(zoomedItems[index]);
+      if (zoomedImages[index]) {
+        zoomedImages[index].parentNode.parentNode.style.display = 'none';
       }
     });
-    console.log('[GB] removeFromZoomedView: removed', indicesToRemove.length, 'items');
+    console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
   function filterProductImages(flagValue) {
