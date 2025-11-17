@@ -21,6 +21,11 @@
       items.forEach(function (li) {
         var img = li.querySelector('img');
         if (!img) return;
+        // Check if image is within a .product-media-container with Image zoom button
+        var container = img.closest('.product-media-container');
+        if (!container) return;
+        var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+        if (zoomButtons.length === 0) return;
         var shouldKeep = shouldShowImageByAlt(img, flagValue);
         if (shouldKeep) {
           kept++;
@@ -35,6 +40,11 @@
       thumbs.forEach(function (li) {
         var img = li.querySelector('img');
         if (!img) return;
+        // Check if image is within a .product-media-container with Image zoom button
+        var container = img.closest('.product-media-container');
+        if (!container) return;
+        var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+        if (zoomButtons.length === 0) return;
         var shouldKeep = shouldShowImageByAlt(img, flagValue);
         if (shouldKeep) return;
         li.parentNode && li.parentNode.removeChild(li);
@@ -62,15 +72,23 @@
   }
 
   function filterProductImages(flagValue) {
-    var scope = document.querySelector('[data-product], main, [role="main"]') || document;
-    var imgs = scope.querySelectorAll('img');
+    // Find all .product-media-container that contain a button with aria-label="Image zoom"
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
     var kept = 0, hidden = 0;
-    imgs.forEach(function (img) {
-      var shouldKeep = shouldShowImageByAlt(img, flagValue);
-      if (shouldKeep) { kept++; return; }
-      removeElementContainerForImage(img);
-      hidden++;
-    });
+    for (var i = 0; i < productMediaContainers.length; i++) {
+      var container = productMediaContainers[i];
+      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+      if (zoomButtons.length > 0) {
+        // Filter images within this container
+        var imgs = container.querySelectorAll('img');
+        imgs.forEach(function (img) {
+          var shouldKeep = shouldShowImageByAlt(img, flagValue);
+          if (shouldKeep) { kept++; return; }
+          removeElementContainerForImage(img);
+          hidden++;
+        });
+      }
+    }
     console.log('[GB] filterProductImages: kept', kept, 'hidden', hidden, 'filter value:', flagValue);
     try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
   }
@@ -82,16 +100,30 @@
         m.addedNodes && m.addedNodes.forEach(function (n) {
           if (n.nodeType === 1) {
             if (n.tagName === 'IMG') {
-              touched = true;
-              var shouldKeep = shouldShowImageByAlt(n, flagValue);
-              if (!shouldKeep) removeElementContainerForImage(n);
+              // Check if image is within a .product-media-container with Image zoom button
+              var container = n.closest('.product-media-container');
+              if (container) {
+                var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+                if (zoomButtons.length > 0) {
+                  touched = true;
+                  var shouldKeep = shouldShowImageByAlt(n, flagValue);
+                  if (!shouldKeep) removeElementContainerForImage(n);
+                }
+              }
             } else {
               var imgs = n.querySelectorAll && n.querySelectorAll('img');
               if (imgs && imgs.length) {
-                touched = true;
                 imgs.forEach(function (img) {
-                  var shouldKeep = shouldShowImageByAlt(img, flagValue);
-                  if (!shouldKeep) removeElementContainerForImage(img);
+                  // Check if image is within a .product-media-container with Image zoom button
+                  var container = img.closest('.product-media-container');
+                  if (container) {
+                    var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
+                    if (zoomButtons.length > 0) {
+                      touched = true;
+                      var shouldKeep = shouldShowImageByAlt(img, flagValue);
+                      if (!shouldKeep) removeElementContainerForImage(img);
+                    }
+                  }
                 });
               }
             }
@@ -104,6 +136,19 @@
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });
     return observer;
+  }
+
+  // Helper function to check if we're on a product page
+  function isProductPage() {
+    // Check for product page indicators
+    if (document.querySelector('[data-product]') || document.querySelector('.product')) {
+      return true;
+    }
+    // Check URL path for product page
+    if (window.location.pathname && window.location.pathname.indexOf('/products/') !== -1) {
+      return true;
+    }
+    return false;
   }
 
   // Helper function to check if any images contain "kai_" in their alt text
@@ -131,6 +176,13 @@
   // Handler for 'image-format' flag
   function handleImageFormat(value) {
     console.log("[GB] 'image-format' => value:", value);
+    
+    // Only apply filtering on product pages
+    if (!isProductPage()) {
+      console.log('Skipping filter: not on a product page');
+      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
+      return;
+    }
     
     // Don't filter if flag value is "none" or if no images contain "kai_"
     if (value === 'none' || !hasAnyKaiImages()) {
