@@ -81,7 +81,7 @@
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
     // Exclude containers inside #QuickView (at any nesting level)
     // Select divs within .product-media-container where x-ref is not 'thumbnail'
-    var productMediaContainers = document.querySelectorAll('.product-media-container div:not([x-ref="thumbnail"])');
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
       // Skip if container or any ancestor is #QuickView
