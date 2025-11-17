@@ -4,9 +4,15 @@
   // Hide images until we decide what to keep
   try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
   function shouldShowImageByAlt(img, flagValue) {
-    if (!flagValue || flagValue.toLowerCase() === 'none') return true; // Show all if no flag value or flag value is "none"
+    const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
     var alt = (img.getAttribute('alt') || '').trim();
-    return alt.indexOf('kai_' + flagValue) !== -1; // Check if alt text contains flag value
+    const imageHasBeenTagged = alt.indexOf('kai_') !== -1;
+    const imageHasFlagValue = alt.indexOf('kai_' + flagValue) !== -1;
+    if (imageHasBeenTagged) {
+      return imageHasFlagValue;
+    } else {
+      return !isFlagValueSet;
+    }
   }
 
   // Prune entire gallery slides/thumbnails (Dawn-style) so layout/counts match
