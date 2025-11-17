@@ -531,6 +531,20 @@
     evaluateFlag('event:ready');
   });
 
+  // Check if DOM is already ready (for scripts that load after DOMContentLoaded)
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    console.log('[GB] DOM already ready, evaluating immediately');
+    evaluateFlag('immediate');
+  }
+
+  // Listen for readystatechange - fires when DOM is ready but before images load
+  document.addEventListener('readystatechange', function () {
+    if (document.readyState === 'interactive') {
+      console.log('[GB] readystatechange: interactive (DOM ready, images not loaded)');
+      evaluateFlag('readystatechange:interactive');
+    }
+  });
+
   window.addEventListener('DOMContentLoaded', function () {
     console.log('[GB] DOMContentLoaded event received');
     evaluateFlag('DOMContentLoaded');
