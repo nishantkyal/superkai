@@ -130,44 +130,15 @@
   function filterProductImages(flagValue) {
     // Collect indices of images to remove first
     var indicesToRemove = collectImageIndicesToRemove(flagValue);
-    
-    if (indicesToRemove.length === 0) {
-      console.log('[GB] filterProductImages: no images to remove');
-      //document.documentElement.classList.remove('hidden');
-      return;
-    }
-
     // Remove from all three places
     hideFromThumbnails(indicesToRemove);
     removeFromMainGallery(indicesToRemove);
     hideFromZoomedView(indicesToRemove);
-
-    var kept = 0, hidden = indicesToRemove.length;
-    // Find all .product-media-container that contain a button with aria-label="Image zoom"
-    // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     if (productMediaContainers.length > 0) {
       document.documentElement.classList.remove('hidden');
     }
-    for (var i = 0; i < productMediaContainers.length; i++) {
-      var container = productMediaContainers[i];
-      // Skip if container or any ancestor is #QuickView
-      if (container.closest('#QuickView')) {
-        continue;
-      }
-      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-      if (zoomButtons.length > 0) {
-        var imgs = container.querySelectorAll('img');
-        kept = imgs.length - hidden;
-        break;
-      }
-    }
-    
-    console.log('[GB] filterProductImages: kept', kept, 'hidden', hidden, 'filter value:', flagValue);
-    try { document.documentElement.classList.remove('hidden'); } catch (e) { }
   }
-
-  
 
   // Helper function to check if we're on a product page
   function isProductPage() {
