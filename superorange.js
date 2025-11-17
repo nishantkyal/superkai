@@ -88,12 +88,11 @@
       if (container.closest('#QuickView')) {
         continue;
       }
-      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-      if (zoomButtons.length > 0) {
+      var zoomImages = container.querySelectorAll('button[aria-label="Image zoom"] img');
+      if (zoomImages.length > 0) {
         // Collect images and their indices
-        var imgs = container.querySelectorAll('img');
-        for (var j = 0; j < imgs.length; j++) {
-          var shouldKeep = shouldShowImageByAlt(imgs[j], flagValue);
+        for (var j = 0; j < zoomImages.length; j++) {
+          var shouldKeep = shouldShowImageByAlt(zoomImages[j], flagValue);
           if (!shouldKeep) {
             indicesToRemove.push(j);
           }
