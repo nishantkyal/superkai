@@ -24,6 +24,8 @@
         // Check if image is within a .product-media-container with Image zoom button
         var container = img.closest('.product-media-container');
         if (!container) return;
+        // Skip if container or any ancestor is #QuickView
+        if (container.closest('#QuickView')) return;
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         if (zoomButtons.length === 0) return;
         var shouldKeep = shouldShowImageByAlt(img, flagValue);
@@ -43,6 +45,8 @@
         // Check if image is within a .product-media-container with Image zoom button
         var container = img.closest('.product-media-container');
         if (!container) return;
+        // Skip if container or any ancestor is #QuickView
+        if (container.closest('#QuickView')) return;
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         if (zoomButtons.length === 0) return;
         var shouldKeep = shouldShowImageByAlt(img, flagValue);
@@ -75,13 +79,12 @@
   function collectImageIndicesToRemove(flagValue) {
     var indicesToRemove = [];
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
-    // Exclude containers inside #QuickView
+    // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
-    var quickView = document.querySelector('#QuickView');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
-      // Skip if container is inside #QuickView
-      if (quickView && quickView.contains(container)) {
+      // Skip if container or any ancestor is #QuickView
+      if (container.closest('#QuickView')) {
         continue;
       }
       var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
@@ -180,9 +183,14 @@
 
     var kept = 0, hidden = indicesToRemove.length;
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
+    // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
+      // Skip if container or any ancestor is #QuickView
+      if (container.closest('#QuickView')) {
+        continue;
+      }
       var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
       if (zoomButtons.length > 0) {
         var imgs = container.querySelectorAll('img');
@@ -205,6 +213,8 @@
               // Check if image is within a .product-media-container with Image zoom button
               var container = n.closest('.product-media-container');
               if (container) {
+                // Skip if container or any ancestor is #QuickView
+                if (container.closest('#QuickView')) return;
                 var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
                 if (zoomButtons.length > 0) {
                   touched = true;
@@ -219,6 +229,8 @@
                   // Check if image is within a .product-media-container with Image zoom button
                   var container = img.closest('.product-media-container');
                   if (container) {
+                    // Skip if container or any ancestor is #QuickView
+                    if (container.closest('#QuickView')) return;
                     var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
                     if (zoomButtons.length > 0) {
                       touched = true;
@@ -256,9 +268,14 @@
   // Helper function to check if any images contain "kai_" in their alt text
   function hasAnyKaiImages() {
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
+    // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
+      // Skip if container or any ancestor is #QuickView
+      if (container.closest('#QuickView')) {
+        continue;
+      }
       var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
       if (zoomButtons.length > 0) {
         // Check images within this container
@@ -295,9 +312,14 @@
     
     if (value) {
       // Find all .product-media-container that contain a button with aria-label="Image zoom"
+      // Exclude containers inside #QuickView (at any nesting level)
       var productMediaContainers = document.querySelectorAll('.product-media-container');
       for (var i = 0; i < productMediaContainers.length; i++) {
         var container = productMediaContainers[i];
+        // Skip if container or any ancestor is #QuickView
+        if (container.closest('#QuickView')) {
+          continue;
+        }
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         if (zoomButtons.length > 0) {
           // Resize images within this container
