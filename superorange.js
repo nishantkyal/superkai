@@ -175,6 +175,11 @@
         if (container.closest('#QuickView')) {
           continue;
         }
+
+        // remove padding-bottom from product-media-container
+        container.classList.remove('pb-7');
+
+        // resize zoom buttons
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         zoomButtons.forEach(function (zoomButton) {
           zoomButton.style.setProperty("height", "573px", "important");
@@ -183,11 +188,8 @@
       }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
     }
-    // Prune high-level gallery slides first so layout counts are correct
-    //pruneDawnGalleries(value);
+    
     filterProductImages(value);
-
-//observeDynamicImages(value);
   }
 
   function handleCartLabel(value) {
@@ -265,13 +267,17 @@
         e.parentNode?.classList.remove('w-fit');
       });
       document.querySelectorAll('.x-thumbnail button').forEach(e => {
-        e.replaceChildren(); const div = document.createElement('div');
+        e.replaceChildren(); 
+        e.classList.remove('pb-[100%]'); 
+        const div = document.createElement('div');
         div.style.width = '10px';
         div.style.height = '10px';
         div.style.backgroundColor = 'gray';
-        div.style.borderRadius = '2px';
+        div.style.borderRadius = '5px';
         e.appendChild(div);
-        e.classList.remove('h-full'); e.classList.remove('w-full'); e.parentNode.classList.remove('min-w-[50px]')
+        e.classList.remove('h-full'); 
+        e.classList.remove('w-full'); 
+        e.parentNode.classList.remove('min-w-[50px]');
       });
     }
   }
