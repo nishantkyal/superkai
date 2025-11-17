@@ -133,7 +133,7 @@
     
     if (indicesToRemove.length === 0) {
       console.log('[GB] filterProductImages: no images to remove');
-      document.documentElement.classList.remove('hidden');
+      //document.documentElement.classList.remove('hidden');
       return;
     }
 
