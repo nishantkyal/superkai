@@ -162,7 +162,7 @@
     // Hide items based on indices
     indicesToRemove.forEach(function(index) {
       if (thumbnails[index]) {
-        thumbnails[index].style.display = 'none';
+        thumbnails[index].parentNode.removeChild(thumbnails[index]);
       }
     });
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
