@@ -107,10 +107,24 @@
   // Placeholder: Remove images from thumbnails by index
   // TODO: Add CSS selector for thumbnails
   function removeFromThumbnails(indicesToRemove) {
-    // Select thumbnails within .splide-image elements
-    var thumbnails = document.querySelectorAll(".splide-image .media-thumbnail");
+    // Select .splide-image containers and filter at container level
+    // Exclude containers inside #QuickView (at any nesting level)
+    var allSplideContainers = document.querySelectorAll(".splide-image");
+    var thumbnails = [];
+    for (var i = 0; i < allSplideContainers.length; i++) {
+      var container = allSplideContainers[i];
+      // Skip if container or any ancestor is #QuickView
+      if (container.closest('#QuickView')) {
+        continue;
+      }
+      // Collect thumbnails from this container
+      var containerThumbnails = container.querySelectorAll('.media-thumbnail');
+      for (var j = 0; j < containerThumbnails.length; j++) {
+        thumbnails.push(containerThumbnails[j]);
+      }
+    }
     if (!thumbnails || thumbnails.length === 0) {
-      console.log('[GB] removeFromThumbnails: no thumbnails found');
+      console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
       return;
     }
     // TODO: Implement removal logic based on indices
