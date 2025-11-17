@@ -1,32 +1,8 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
-  // Inject CSS immediately to prevent flicker - hide elements that will be filtered
-  (function() {
-    var style = document.createElement('style');
-    style.textContent = '.gb-filter-pending .product-media-container { visibility: hidden; } .gb-filter-pending .splide-image { visibility: hidden; }';
-    var head = document.head || document.getElementsByTagName('head')[0];
-    if (head) {
-      head.insertBefore(style, head.firstChild);
-    }
-  })();
-
   // Hide images until we decide what to keep
   try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
-  
-  // Execute filtering immediately if DOM is ready (synchronous, prevents flicker)
-  if (document.readyState === 'loading') {
-    // DOM is still loading, will be handled by events
-  } else {
-    // DOM is already ready - execute immediately to prevent flicker
-    // Use setTimeout(0) to ensure it runs in the next tick but before paint
-    setTimeout(function() {
-      if (window._growthbook) {
-        console.log('[GB] Executing immediately to prevent flicker');
-        evaluateFlag('immediate-sync');
-      }
-    }, 0);
-  }
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
     var alt = (img.getAttribute('alt') || '').trim();
@@ -39,71 +15,8 @@
     }
   }
 
-  // Prune entire gallery slides/thumbnails (Dawn-style) so layout/counts match
-  function pruneDawnGalleries(flagValue) {
-    var galleryUl = document.querySelector('ul[id^="Slider-Gallery-"]');
-    var thumbUl = document.querySelector('ul[id^="Slider-Thumbnails-"]');
-    var productRoot = document.querySelector('[data-product]') || document.querySelector('.product');
-    var slidesRemoved = 0;
-    var kept = 0;
-    if (galleryUl) {
-      var items = Array.prototype.slice.call(galleryUl.children);
-      items.forEach(function (li) {
-        var img = li.querySelector('img');
-        if (!img) return;
-        // Check if image is within a .product-media-container with Image zoom button
-        var container = img.closest('.product-media-container');
-        if (!container) return;
-        // Skip if container or any ancestor is #QuickView
-        if (container.closest('#QuickView')) return;
-        var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-        if (zoomButtons.length === 0) return;
-        var shouldKeep = shouldShowImageByAlt(img, flagValue);
-        if (shouldKeep) {
-          kept++;
-          return;
-        }
-        li.parentNode && li.parentNode.removeChild(li);
-        slidesRemoved++;
-      });
-    }
-    if (thumbUl) {
-      var thumbs = Array.prototype.slice.call(thumbUl.children);
-      thumbs.forEach(function (li) {
-        var img = li.querySelector('img');
-        if (!img) return;
-        // Check if image is within a .product-media-container with Image zoom button
-        var container = img.closest('.product-media-container');
-        if (!container) return;
-        // Skip if container or any ancestor is #QuickView
-        if (container.closest('#QuickView')) return;
-        var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-        if (zoomButtons.length === 0) return;
-        var shouldKeep = shouldShowImageByAlt(img, flagValue);
-        if (shouldKeep) return;
-        li.parentNode && li.parentNode.removeChild(li);
-      });
-    }
-    // Update media count indicators if present
-    try {
-      var countEls = document.querySelectorAll('[id^="MediaCount"]');
-      countEls.forEach(function (el) { el.textContent = kept.toString(); });
-      if (productRoot) {
-        productRoot.setAttribute('data-media-count', kept.toString());
-      }
-    } catch (e) { }
-    if (slidesRemoved || kept) {
-      console.log('[GB] pruneDawnGalleries: kept', kept, 'removed', slidesRemoved);
-      // Notify layout components
-      try { window.dispatchEvent(new Event('resize')); } catch (e) { }
-    }
-  }
+  
 
-  function removeElementContainerForImage(img) {
-    if (img && img.parentNode) {
-      img.parentNode.removeChild(img);
-    }
-  }
 
   // Collect indices of images that should be removed based on flag value
   function collectImageIndicesToRemove(flagValue) {
@@ -254,54 +167,7 @@
     try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
   }
 
-  function observeDynamicImages(flagValue) {
-    var observer = new MutationObserver(function (mutations) {
-      var touched = false;
-      mutations.forEach(function (m) {
-        m.addedNodes && m.addedNodes.forEach(function (n) {
-          if (n.nodeType === 1) {
-            if (n.tagName === 'IMG') {
-              // Check if image is within a .product-media-container with Image zoom button
-              var container = n.closest('.product-media-container');
-              if (container) {
-                // Skip if container or any ancestor is #QuickView
-                if (container.closest('#QuickView')) return;
-                var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-                if (zoomButtons.length > 0) {
-                  touched = true;
-                  var shouldKeep = shouldShowImageByAlt(n, flagValue);
-                  if (!shouldKeep) removeElementContainerForImage(n);
-                }
-              }
-            } else {
-              var imgs = n.querySelectorAll && n.querySelectorAll('img');
-              if (imgs && imgs.length) {
-                imgs.forEach(function (img) {
-                  // Check if image is within a .product-media-container with Image zoom button
-                  var container = img.closest('.product-media-container');
-                  if (container) {
-                    // Skip if container or any ancestor is #QuickView
-                    if (container.closest('#QuickView')) return;
-                    var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-                    if (zoomButtons.length > 0) {
-                      touched = true;
-                      var shouldKeep = shouldShowImageByAlt(img, flagValue);
-                      if (!shouldKeep) removeElementContainerForImage(img);
-                    }
-                  }
-                });
-              }
-            }
-          }
-        });
-      });
-      if (touched) {
-        console.log('[GB] observer: applied filter to new images');
-      }
-    });
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-    return observer;
-  }
+  
 
   // Helper function to check if we're on a product page
   function isProductPage() {
