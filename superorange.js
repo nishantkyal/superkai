@@ -133,7 +133,7 @@
     
     if (indicesToRemove.length === 0) {
       console.log('[GB] filterProductImages: no images to remove');
-      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
+      document.documentElement.classList.remove('hidden');
       return;
     }
 
@@ -164,7 +164,7 @@
     }
     
     console.log('[GB] filterProductImages: kept', kept, 'hidden', hidden, 'filter value:', flagValue);
-    try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
+    try { document.documentElement.classList.remove('hidden'); } catch (e) { }
   }
 
   
@@ -182,32 +182,6 @@
     return false;
   }
 
-  // Helper function to check if any images contain "kai_" in their alt text
-  function hasAnyKaiImages() {
-    // Find all .product-media-container that contain a button with aria-label="Image zoom"
-    // Exclude containers inside #QuickView (at any nesting level)
-    var productMediaContainers = document.querySelectorAll('.product-media-container');
-    for (var i = 0; i < productMediaContainers.length; i++) {
-      var container = productMediaContainers[i];
-      // Skip if container or any ancestor is #QuickView
-      if (container.closest('#QuickView')) {
-        continue;
-      }
-      var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-      if (zoomButtons.length > 0) {
-        // Check images within this container
-        var imgs = container.querySelectorAll('img');
-        for (var j = 0; j < imgs.length; j++) {
-          var alt = (imgs[j].getAttribute('alt') || '').trim();
-          if (alt.indexOf('kai_') !== -1) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
-
   // Flag handlers - moved to root level
   // Handler for 'image-format' flag
   function handleImageFormat(value) {
@@ -219,13 +193,6 @@
       document.documentElement.classList.remove('hidden');
       return;
     }
-    
-    // Don't filter if flag value is "none" or if no images contain "kai_"
-    /* if (value.toLowerCase() === 'none' || !hasAnyKaiImages()) {
-      console.log('Skipping filter: flag value is "none" or no images contain "kai_"');
-      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
-      return;
-    } */
     
     if (value.toLowerCase() !== 'none') {
       // Find all .product-media-container that contain a button with aria-label="Image zoom"
