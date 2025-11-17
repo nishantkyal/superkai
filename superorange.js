@@ -1,8 +1,32 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
+  // Inject CSS immediately to prevent flicker - hide elements that will be filtered
+  (function() {
+    var style = document.createElement('style');
+    style.textContent = '.gb-filter-pending .product-media-container { visibility: hidden; } .gb-filter-pending .splide-image { visibility: hidden; }';
+    var head = document.head || document.getElementsByTagName('head')[0];
+    if (head) {
+      head.insertBefore(style, head.firstChild);
+    }
+  })();
+
   // Hide images until we decide what to keep
   try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
+  
+  // Execute filtering immediately if DOM is ready (synchronous, prevents flicker)
+  if (document.readyState === 'loading') {
+    // DOM is still loading, will be handled by events
+  } else {
+    // DOM is already ready - execute immediately to prevent flicker
+    // Use setTimeout(0) to ensure it runs in the next tick but before paint
+    setTimeout(function() {
+      if (window._growthbook) {
+        console.log('[GB] Executing immediately to prevent flicker');
+        evaluateFlag('immediate-sync');
+      }
+    }, 0);
+  }
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
     var alt = (img.getAttribute('alt') || '').trim();
