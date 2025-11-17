@@ -146,6 +146,9 @@
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
     // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
+    if (productMediaContainers.length > 0) {
+      document.querySelectorAll('.splide-image').forEach(e => e.classList.remove('hidden'))
+    }
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
       // Skip if container or any ancestor is #QuickView
@@ -235,20 +238,17 @@
           continue;
         }
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-        zoomButtons.forEach(function(zoomButton) {
+        zoomButtons.forEach(function (zoomButton) {
           zoomButton.style.setProperty("height", "573px", "important");
         });
         console.log('Resized', zoomButtons.length, 'zoom buttons in product-media-container with Image zoom button(s)');
       }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
-    } else {
-      console.log('No filter value: showing all images');
     }
     // Prune high-level gallery slides first so layout counts are correct
     //pruneDawnGalleries(value);
     filterProductImages(value);
-    
-    document.querySelectorAll('.splide-image').forEach(e => e.classList.remove('hidden'))
+
 //observeDynamicImages(value);
   }
 
