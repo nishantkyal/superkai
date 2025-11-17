@@ -343,7 +343,7 @@
         }
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
         zoomButtons.forEach(function(zoomButton) {
-          zoomButton.style.setProperty("height", "533px", "important");
+          zoomButton.style.setProperty("height", "573px", "important");
         });
         console.log('Resized', zoomButtons.length, 'zoom buttons in product-media-container with Image zoom button(s)');
       }
