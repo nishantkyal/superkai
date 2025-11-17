@@ -139,22 +139,33 @@
   // Placeholder: Remove images from main product gallery by index
   // TODO: Add CSS selector for main product gallery
   function removeFromMainGallery(indicesToRemove) {
-    // TODO: Replace with actual CSS selector for main product gallery
-    var gallerySelector = ''; // TODO: Add CSS selector for main product gallery
-    if (!gallerySelector) {
-      console.log('[GB] removeFromMainGallery: selector not yet configured');
+    // Select .splide-image containers and filter at container level
+    // Exclude containers inside #QuickView (at any nesting level)
+    var allSplideContainers = document.querySelectorAll(".splide-image");
+    var thumbnails = [];
+    for (var i = 0; i < allSplideContainers.length; i++) {
+      var container = allSplideContainers[i];
+      // Skip if container or any ancestor is #QuickView
+      if (container.closest('#QuickView')) {
+        continue;
+      }
+      // Collect thumbnails from this container
+      var containerThumbnails = container.querySelectorAll('.media-slide');
+      for (var j = 0; j < containerThumbnails.length; j++) {
+        thumbnails.push(containerThumbnails[j]);
+      }
+    }
+    if (!thumbnails || thumbnails.length === 0) {
+      console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
       return;
     }
-    var galleryItems = document.querySelectorAll(gallerySelector);
-    // TODO: Implement removal logic based on indices
-    // Remove items in reverse order to maintain correct indices
-    indicesToRemove.sort(function(a, b) { return b - a; });
+    // Hide items based on indices
     indicesToRemove.forEach(function(index) {
-      if (galleryItems[index] && galleryItems[index].parentNode) {
-        galleryItems[index].parentNode.removeChild(galleryItems[index]);
+      if (thumbnails[index]) {
+        thumbnails[index].style.display = 'none';
       }
     });
-    console.log('[GB] removeFromMainGallery: removed', indicesToRemove.length, 'items');
+    console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
   // Placeholder: Remove images from zoomed in view by index
