@@ -107,6 +107,11 @@
         thumbnails[i].classList.add('hidden');
       } else {
         thumbnails[i].style.transform = `translateX(-${unhiddenCount * 100}%)`;
+        thumbnails[i].classList.add('is-visible');
+        thumbnails[i].classList.remove('is-active');
+        if (unhiddenCount === 0) {
+          thumbnails[i].classList.add('featured-image');
+        }
         unhiddenCount++;
       }
     }
