@@ -342,14 +342,10 @@
           continue;
         }
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-        if (zoomButtons.length > 0) {
-          // Resize images within this container
-          var images = container.querySelectorAll('img');
-          images.forEach(function(img) {
-            img.style.setProperty("height", "533px", "important");
-          });
-          console.log('Resized', images.length, 'images in product-media-container with Image zoom button(s)');
-        }
+        zoomButtons.forEach(function(zoomButton) {
+          zoomButton.style.setProperty("height", "533px", "important");
+        });
+        console.log('Resized', zoomButtons.length, 'zoom buttons in product-media-container with Image zoom button(s)');
       }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
     } else {
