@@ -1,8 +1,8 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
-  // Hide images until we decide what to keep
-  try { document.documentElement.classList.add('gb-filter-pending'); } catch (e) { }
+  document.querySelectorAll('.splide-image').forEach(e => e.classList.add('hidden'))
+
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
     var alt = (img.getAttribute('alt') || '').trim();
@@ -14,9 +14,6 @@
       return !isFlagValueSet;
     }
   }
-
-  
-
 
   // Collect indices of images that should be removed based on flag value
   function collectImageIndicesToRemove(flagValue) {
@@ -250,7 +247,9 @@
     // Prune high-level gallery slides first so layout counts are correct
     //pruneDawnGalleries(value);
     filterProductImages(value);
-    //observeDynamicImages(value);
+    
+    document.querySelectorAll('.splide-image').forEach(e => e.classList.remove('hidden'))
+//observeDynamicImages(value);
   }
 
   function handleCartLabel(value) {
