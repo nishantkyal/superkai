@@ -1,7 +1,7 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
-  document.querySelectorAll('.splide-image').forEach(e => e.classList.add('hidden'))
+  document.documentElement.classList.add('hidden');
 
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
@@ -147,7 +147,7 @@
     // Exclude containers inside #QuickView (at any nesting level)
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     if (productMediaContainers.length > 0) {
-      document.querySelectorAll('.splide-image').forEach(e => e.classList.remove('hidden'))
+      document.documentElement.classList.remove('hidden');
     }
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
