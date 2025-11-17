@@ -161,7 +161,7 @@
   // TODO: Add CSS selector for zoomed in view
   function hideFromZoomedView(indicesToRemove) {
     // TODO: Replace with actual CSS selector for zoomed in view
-    var zoomedSelector = 'div[aria-label="Media Gallery" img]'; // TODO: Add CSS selector for zoomed in view
+    var zoomedSelector = 'div[aria-label="Media Gallery"] img'; // TODO: Add CSS selector for zoomed in view
     if (!zoomedSelector) {
       console.log('[GB] removeFromZoomedView: selector not yet configured');
       return;
