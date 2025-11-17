@@ -99,12 +99,17 @@
       console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
       return;
     }
-    // Hide items based on indices
-    indicesToRemove.forEach(function(index) {
-      if (thumbnails[index]) {
-        thumbnails[index].classList.add('hidden');
+
+    // Iterate over thumbnails and hide items based on indices
+    var unhiddenCount = 0;
+    for (var i = 0; i < thumbnails.length; i++) {
+      if (indicesToRemove.includes(i)) {
+        thumbnails[i].classList.add('hidden');
+      } else {
+        thumbnails[i].style.transform = `translateX(-${unhiddenCount * 100}%)`;
+        unhiddenCount++;
       }
-    });
+    }
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
