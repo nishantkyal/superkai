@@ -1,7 +1,7 @@
 // This is the script that will actually make the changes to the product page
 // based on the flag value that is set in the growthbook config
 (function () {
-  //document.documentElement.classList.add('hidden');
+  document.documentElement.classList.add('hidden');
 
   function shouldShowImageByAlt(img, flagValue) {
     const isFlagValueSet = flagValue?.toLowerCase() !== 'none';
@@ -218,6 +218,8 @@
       console.log('Skipping filter: not on a product page');
       try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
       return;
+    } else {
+      document.documentElement.classList.remove('hidden');
     }
     
     // Don't filter if flag value is "none" or if no images contain "kai_"
