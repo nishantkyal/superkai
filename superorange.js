@@ -216,10 +216,8 @@
     // Only apply filtering on product pages
     if (!isProductPage()) {
       console.log('Skipping filter: not on a product page');
-      try { document.documentElement.classList.remove('gb-filter-pending'); } catch (e) { }
-      return;
-    } else {
       document.documentElement.classList.remove('hidden');
+      return;
     }
     
     // Don't filter if flag value is "none" or if no images contain "kai_"
