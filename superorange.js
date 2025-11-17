@@ -106,7 +106,7 @@
 
   // Placeholder: Remove images from thumbnails by index
   // TODO: Add CSS selector for thumbnails
-  function removeFromThumbnails(indicesToRemove) {
+  function hideFromThumbnails(indicesToRemove) {
     // Select .splide-image containers and filter at container level
     // Exclude containers inside #QuickView (at any nesting level)
     var allSplideContainers = document.querySelectorAll(".splide-image");
@@ -159,7 +159,7 @@
 
   // Placeholder: Remove images from zoomed in view by index
   // TODO: Add CSS selector for zoomed in view
-  function removeFromZoomedView(indicesToRemove) {
+  function hideFromZoomedView(indicesToRemove) {
     // TODO: Replace with actual CSS selector for zoomed in view
     var zoomedSelector = 'div[aria-label="Media Gallery" img]'; // TODO: Add CSS selector for zoomed in view
     if (!zoomedSelector) {
@@ -187,9 +187,9 @@
     }
 
     // Remove from all three places
-    removeFromThumbnails(indicesToRemove);
+    hideFromThumbnails(indicesToRemove);
     removeFromMainGallery(indicesToRemove);
-    removeFromZoomedView(indicesToRemove);
+    hideFromZoomedView(indicesToRemove);
 
     var kept = 0, hidden = indicesToRemove.length;
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
