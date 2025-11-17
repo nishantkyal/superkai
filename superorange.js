@@ -127,15 +127,13 @@
       console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
       return;
     }
-    // TODO: Implement removal logic based on indices
-    // Remove items in reverse order to maintain correct indices
-    indicesToRemove.sort(function(a, b) { return b - a; });
+    // Hide items based on indices
     indicesToRemove.forEach(function(index) {
-      if (thumbnails[index] && thumbnails[index].parentNode) {
-        thumbnails[index].parentNode.removeChild(thumbnails[index]);
+      if (thumbnails[index]) {
+        thumbnails[index].style.display = 'none';
       }
     });
-    console.log('[GB] removeFromThumbnails: removed', indicesToRemove.length, 'items');
+    console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
   // Placeholder: Remove images from main product gallery by index
