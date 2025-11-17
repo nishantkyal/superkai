@@ -75,9 +75,15 @@
   function collectImageIndicesToRemove(flagValue) {
     var indicesToRemove = [];
     // Find all .product-media-container that contain a button with aria-label="Image zoom"
+    // Exclude containers inside #QuickView
     var productMediaContainers = document.querySelectorAll('.product-media-container');
+    var quickView = document.querySelector('#QuickView');
     for (var i = 0; i < productMediaContainers.length; i++) {
       var container = productMediaContainers[i];
+      // Skip if container is inside #QuickView
+      if (quickView && quickView.contains(container)) {
+        continue;
+      }
       var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
       if (zoomButtons.length > 0) {
         // Collect images and their indices
