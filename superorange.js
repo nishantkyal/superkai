@@ -73,7 +73,15 @@
         thumbnails[index].style.display = 'none';
       }
     });
-    
+
+    // MArk the first non-hidden thumbnail as featured
+    /* for (var i = 0; i < thumbnails.length; i++) {
+      if (thumbnails[i].style.display !== 'none') {
+        thumbnails[i].classList.add('featured-image');
+        thumbnails[i].classList.remove('opacity-30');
+        break;
+      }
+    } */
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
@@ -103,17 +111,29 @@
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
+  let imagesFiltered = false;
   function filterProductImages(flagValue) {
+    if (imagesFiltered) {
+      return;
+    }
     // Collect indices of images to remove first
     var indicesToRemove = collectImageIndicesToRemove(flagValue);
+    
+    // Check if we actually have elements to filter
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
+    if (productMediaContainers.length === 0) {
+      // Elements not ready yet, don't set flag so it can retry
+      return;
+    }
+    
     // Remove from all three places
     hideFromThumbnails(indicesToRemove);
     removeFromMainGallery(indicesToRemove);
     hideFromZoomedView(indicesToRemove);
-    var productMediaContainers = document.querySelectorAll('.product-media-container');
-    if (productMediaContainers.length > 0) {
-      document.documentElement.classList.remove('hidden');
-    }
+    
+    // Only set flag after successful filtering
+    imagesFiltered = true;
+    document.documentElement.classList.remove('hidden');
   }
 
   // Helper function to check if we're on a product page
