@@ -70,18 +70,18 @@
     // Hide items based on indices
     indicesToRemove.forEach(function(index) {
       if (thumbnails[index]) {
-        thumbnails[index].style.display = 'none';
+        thumbnails[index].parentNode.removeChild(thumbnails[index]);
       }
     });
 
     // MArk the first non-hidden thumbnail as featured
-    for (var i = 0; i < thumbnails.length; i++) {
+    /* for (var i = 0; i < thumbnails.length; i++) {
       if (thumbnails[i].style.display !== 'none') {
         thumbnails[i].classList.add('featured-image');
         thumbnails[i].classList.remove('opacity-30');
         break;
       }
-    }
+    } */
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
@@ -111,13 +111,18 @@
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
+  let imagesFiltered = false;
   function filterProductImages(flagValue) {
+    if (imagesFiltered) {
+      return;
+    }
     // Collect indices of images to remove first
     var indicesToRemove = collectImageIndicesToRemove(flagValue);
     // Remove from all three places
     hideFromThumbnails(indicesToRemove);
     removeFromMainGallery(indicesToRemove);
     hideFromZoomedView(indicesToRemove);
+    imagesFiltered = true;
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     if (productMediaContainers.length > 0) {
       document.documentElement.classList.remove('hidden');
