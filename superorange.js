@@ -142,27 +142,6 @@
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
-  function filterProductImages(flagValue) {
-    // Collect indices of images to remove first
-    var indicesToRemove = collectImageIndicesToRemove(flagValue);
-    
-    // Check if we actually have elements to filter
-    var productMediaContainers = document.querySelectorAll('.product-media-container');
-    if (productMediaContainers.length === 0) {
-      // Elements not ready yet, don't set flag so it can retry
-      return;
-    }
-    
-    
-    // Remove from all three places
-    hideFromThumbnails(indicesToRemove);
-    removeFromMainGallery(indicesToRemove);
-    hideFromZoomedView(indicesToRemove);
-    
-    // Only set flag after successful filtering
-    document.documentElement.classList.remove('hidden');
-  }
-
   // Helper function to check if we're on a product page
   function isProductPage() {
     // Check for product page indicators
@@ -188,6 +167,7 @@
       return;
     }
     
+    var indicesToRemove = collectImageIndicesToRemove(flagValue);
     if (value.toLowerCase() !== 'none') {
       // Find all .product-media-container that contain a button with aria-label="Image zoom"
       // Exclude containers inside #QuickView (at any nesting level)
@@ -203,16 +183,33 @@
         container.classList.remove('pb-7');
 
         // resize zoom buttons
+        if (indicesToRemove.length > 0) {
         var zoomButtons = container.querySelectorAll('button[aria-label="Image zoom"]');
-        zoomButtons.forEach(function (zoomButton) {
-          zoomButton.style.setProperty("height", "573px", "important");
-        });
-        console.log('Resized', zoomButtons.length, 'zoom buttons in product-media-container with Image zoom button(s)');
+          zoomButtons.forEach(function (zoomButton) {
+            zoomButton.style.setProperty("height", "573px", "important");
+          });
+          console.log('Resized', zoomButtons.length, 'zoom buttons in product-media-container with Image zoom button(s)');
+        }
       }
       console.log('Filtering images: showing only images with alt text containing "' + value + '"');
     }
     
-    filterProductImages(value);
+    
+    // Check if we actually have elements to filter
+    var productMediaContainers = document.querySelectorAll('.product-media-container');
+    if (productMediaContainers.length === 0) {
+      // Elements not ready yet, don't set flag so it can retry
+      return;
+    }
+    
+    
+    // Remove from all three places
+    hideFromThumbnails(indicesToRemove);
+    removeFromMainGallery(indicesToRemove);
+    hideFromZoomedView(indicesToRemove);
+    
+    // Only set flag after successful filtering
+    document.documentElement.classList.remove('hidden');
   }
 
   function handleCartLabel(value) {
