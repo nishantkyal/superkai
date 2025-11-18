@@ -37,6 +37,10 @@
             indicesToRemove.push(j);
           }
         }
+        // don't remove all images
+        if (indicesToRemove.length == zoomImages.length) {
+          indicesToRemove = [];
+        }
         // Only process the first container that matches
         break;
       }
@@ -148,6 +152,7 @@
       // Elements not ready yet, don't set flag so it can retry
       return;
     }
+    
     
     // Remove from all three places
     hideFromThumbnails(indicesToRemove);
