@@ -133,7 +133,7 @@
         zoomedImages[index].parentNode.parentNode.style.display = 'none';
       }
     });
-    zoomedViewFiltered = true;
+    zoomedViewFiltered = zoomedImages.length !== 0;
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
