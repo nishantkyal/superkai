@@ -97,7 +97,18 @@
     if (mainGalleryFiltered) {
       return;
     }
-    document.querySelector('#x-product-template--19801717833960__main')?.splide?.remove(indicesToRemove);
+    var galleryElement = document.querySelector('#x-product-template--19801717833960__main');
+    if (!galleryElement || !galleryElement.splide) {
+      // Splide not loaded yet, don't set flag so it can retry
+      console.log('[GB] removeFromMainGallery: splide not loaded yet');
+      return;
+    }
+    // Check if remove method exists (splide is fully initialized)
+    if (typeof galleryElement.splide.remove !== 'function') {
+      console.log('[GB] removeFromMainGallery: splide.remove method not available');
+      return;
+    }
+    galleryElement.splide.remove(indicesToRemove);
     mainGalleryFiltered = true;
     console.log('[GB] removeFromMainGallery: hidden', indicesToRemove.length, 'items');
   }
