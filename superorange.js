@@ -75,7 +75,7 @@
     });
 
     // MArk the first non-hidden thumbnail as featured
-    for (var i = 0; i < thumbnails.length; i++) {s
+    for (var i = 0; i < thumbnails.length; i++) {
       if (thumbnails[i].style.display !== 'none') {
         thumbnails[i].classList.add('featured-image');
         thumbnails[i].classList.remove('opacity-30');
