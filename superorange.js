@@ -80,13 +80,13 @@
     });
 
     // MArk the first non-hidden thumbnail as featured
-    /* for (var i = 0; i < thumbnails.length; i++) {
+    for (var i = 0; i < thumbnails.length; i++) {
       if (thumbnails[i].style.display !== 'none') {
         thumbnails[i].classList.add('featured-image');
         thumbnails[i].classList.remove('opacity-30');
         break;
       }
-    } */
+    }
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
