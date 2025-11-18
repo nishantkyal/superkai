@@ -79,42 +79,7 @@
   // Placeholder: Remove images from main product gallery by index
   // TODO: Add CSS selector for main product gallery
   function removeFromMainGallery(indicesToRemove) {
-    // Select .splide-image containers and filter at container level
-    // Exclude containers inside #QuickView (at any nesting level)
-    var allSplideContainers = document.querySelectorAll(".splide-image");
-    var thumbnails = [];
-    for (var i = 0; i < allSplideContainers.length; i++) {
-      var container = allSplideContainers[i];
-      // Skip if container or any ancestor is #QuickView
-      if (container.closest('#QuickView')) {
-        continue;
-      }
-      // Collect thumbnails from this container
-      var containerThumbnails = container.querySelectorAll('.media-slide');
-      for (var j = 0; j < containerThumbnails.length; j++) {
-        thumbnails.push(containerThumbnails[j]);
-      }
-    }
-    if (!thumbnails || thumbnails.length === 0) {
-      console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
-      return;
-    }
-
-    // Iterate over thumbnails and hide items based on indices
-    var unhiddenCount = 0;
-    for (var i = 0; i < thumbnails.length; i++) {
-      if (indicesToRemove.includes(i)) {
-        thumbnails[i].classList.add('hidden');
-      } else {
-        thumbnails[i].style.transform = `translateX(-${unhiddenCount * 100}%)`;
-        thumbnails[i].classList.add('is-visible');
-        thumbnails[i].classList.remove('is-active');
-        if (unhiddenCount === 0) {
-          thumbnails[i].classList.add('featured-image');
-        }
-        unhiddenCount++;
-      }
-    }
+    document.querySelector('#x-product-template--19801717833960__main')?.splide?.remove(indicesToRemove);
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
