@@ -111,18 +111,13 @@
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
-  let imagesFiltered = false;
   function filterProductImages(flagValue) {
-    if (imagesFiltered) {
-      return;
-    }
     // Collect indices of images to remove first
     var indicesToRemove = collectImageIndicesToRemove(flagValue);
     // Remove from all three places
     hideFromThumbnails(indicesToRemove);
     removeFromMainGallery(indicesToRemove);
     hideFromZoomedView(indicesToRemove);
-    imagesFiltered = true;
     var productMediaContainers = document.querySelectorAll('.product-media-container');
     if (productMediaContainers.length > 0) {
       document.documentElement.classList.remove('hidden');
