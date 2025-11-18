@@ -70,9 +70,18 @@
     // Hide items based on indices
     indicesToRemove.forEach(function(index) {
       if (thumbnails[index]) {
-        thumbnails[index].style.display = 'none';
+        thumbnails[index].parentNode.removeChild(thumbnails[index]);
       }
     });
+
+    // MArk the first non-hidden thumbnail as featured
+    /* for (var i = 0; i < thumbnails.length; i++) {
+      if (thumbnails[i].style.display !== 'none') {
+        thumbnails[i].classList.add('featured-image');
+        thumbnails[i].classList.remove('opacity-30');
+        break;
+      }
+    } */
     console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
   }
 
@@ -80,7 +89,7 @@
   // TODO: Add CSS selector for main product gallery
   function removeFromMainGallery(indicesToRemove) {
     document.querySelector('#x-product-template--19801717833960__main')?.splide?.remove(indicesToRemove);
-    console.log('[GB] removeFromThumbnails: hidden', indicesToRemove.length, 'items');
+    console.log('[GB] removeFromMainGallery: hidden', indicesToRemove.length, 'items');
   }
 
   // Placeholder: Remove images from zoomed in view by index
