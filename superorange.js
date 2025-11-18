@@ -324,12 +324,16 @@
         console.log('[GB] Attributes:', attrs);
         var featureKeys = ['image-format', 'hide-announcement-banner', 'mobile-logo-width', 'small-image-tiles', 'product-title-font-size', 'cart-label'];
 
-        console.log('[GB] Feature keys:', featureKeys);
+        // Collect all flags and values first, then log them all at once
+        var flagsAndValues = {};
+        featureKeys.forEach(function (flagKey) {
+          flagsAndValues[flagKey] = gb.getFeatureValue(flagKey, null);
+        });
+        console.log('[GB] Processing flags:', flagsAndValues);
 
         // Iterate over all flags and process each
         featureKeys.forEach(function (flagKey) {
-          var value = gb.getFeatureValue(flagKey, null);
-          console.log("[GB] Processing flag '" + flagKey + "' => value:", value);
+          var value = flagsAndValues[flagKey];
 
           // Switch case to route to appropriate handler
           switch (flagKey) {
@@ -361,7 +365,7 @@
           }
         });
       } catch (e) {
-        console.log('[GB] Error reading attributes/features', e);
+        console.error('[GB] Error reading attributes/features', e);
       }
     };
     if (gb.ready && typeof gb.ready.then === 'function') {
@@ -377,9 +381,6 @@
   }
 
   // Initial attempt shortly after script tag
-  if (window._growthbook) {
-    console.log('[GB] _growthbook present at boot');
-  }
   evaluateFlag('boot');
 
   // Listen for GrowthBook custom ready event if emitted
@@ -407,11 +408,6 @@
     evaluateFlag('DOMContentLoaded');
   });
 
-  window.addEventListener('shopify:section:load', function () {
-    console.log('[GB] shopify:section:load event received');
-    evaluateFlag('shopify:section:load');
-  });
-
   // Listen to any user interaction events
   var userInteractionTimeout = null;
   var userInteractionEvents = ['click', 'keydown', 'keyup', 'touchstart', 'touchend', 'mousedown', 'mouseup', 'focus', 'input'];
@@ -428,7 +424,7 @@
     }, { passive: true, capture: true });
   });
 
-  // Listen for DOM changes and re-evaluate flags
+/*   // Listen for DOM changes and re-evaluate flags
   var domChangeTimeout = null;
   var domChangeObserver = new MutationObserver(function (mutations) {
     var shouldReevaluate = false;
@@ -459,7 +455,7 @@
   });
 
   console.log('[GB] DOM change observer initialized');
-
+ */
 })();
 
 window.dataLayer = window.dataLayer || [];
