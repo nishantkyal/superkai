@@ -46,7 +46,11 @@
 
   // Placeholder: Remove images from thumbnails by index
   // TODO: Add CSS selector for thumbnails
+  let thumbsFiltered = false;
   function hideFromThumbnails(indicesToRemove) {
+    if (thumbsFiltered) {
+      return;
+    }
     // Select .splide-image containers and filter at container level
     // Exclude containers inside #QuickView (at any nesting level)
     var allSplideContainers = document.querySelectorAll(".splide-image");
@@ -67,10 +71,11 @@
       console.log('[GB] removeFromThumbnails: no thumbnails found (excluding QuickView)');
       return;
     }
+    thumbsFiltered = true;
     // Hide items based on indices
     indicesToRemove.forEach(function(index) {
       if (thumbnails[index]) {
-        thumbnails[index].style.display = 'none';
+        thumbnails[index].parentNode.removeChild(thumbnails[index]);
       }
     });
 
@@ -87,14 +92,23 @@
 
   // Placeholder: Remove images from main product gallery by index
   // TODO: Add CSS selector for main product gallery
+  let mainGalleryFiltered = false;
   function removeFromMainGallery(indicesToRemove) {
+    if (mainGalleryFiltered) {
+      return;
+    }
     document.querySelector('#x-product-template--19801717833960__main')?.splide?.remove(indicesToRemove);
+    mainGalleryFiltered = true;
     console.log('[GB] removeFromMainGallery: hidden', indicesToRemove.length, 'items');
   }
 
   // Placeholder: Remove images from zoomed in view by index
   // TODO: Add CSS selector for zoomed in view
+  let zoomedViewFiltered = false;
   function hideFromZoomedView(indicesToRemove) {
+    if (zoomedViewFiltered) {
+      return;
+    }
     // TODO: Replace with actual CSS selector for zoomed in view
     var zoomedSelector = 'div[aria-label="Media gallery"] img'; // TODO: Add CSS selector for zoomed in view
     if (!zoomedSelector) {
@@ -108,14 +122,11 @@
         zoomedImages[index].parentNode.parentNode.style.display = 'none';
       }
     });
+    zoomedViewFiltered = true;
     console.log('[GB] removeFromZoomedView: hidden', indicesToRemove.length, 'items');
   }
 
-  let imagesFiltered = false;
   function filterProductImages(flagValue) {
-    if (imagesFiltered) {
-      return;
-    }
     // Collect indices of images to remove first
     var indicesToRemove = collectImageIndicesToRemove(flagValue);
     
@@ -132,7 +143,6 @@
     hideFromZoomedView(indicesToRemove);
     
     // Only set flag after successful filtering
-    imagesFiltered = true;
     document.documentElement.classList.remove('hidden');
   }
 
