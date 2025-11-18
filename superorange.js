@@ -281,7 +281,7 @@
   function handleMobileLogoWidth(value) {
     console.log("[GB] 'mobile-logo-width' => value:", value);
     document.querySelector('.logo-name a')?.classList.replace('w-[140px]', `w-[${value}px]`);
-    document.querySelector('#x-product-template-9019934114024-template--19801717833960__main div').classList.remove("pt-[8px]")
+    document.querySelector('#x-product-template-9019934114024-template--19801717833960__main div')?.classList?.remove("pt-[8px]")
   }
 
   function handleSmallImageTiles(value) {
