@@ -167,7 +167,7 @@
       return;
     }
     
-    var indicesToRemove = collectImageIndicesToRemove(flagValue);
+    var indicesToRemove = collectImageIndicesToRemove(value);
     if (value.toLowerCase() !== 'none') {
       // Find all .product-media-container that contain a button with aria-label="Image zoom"
       // Exclude containers inside #QuickView (at any nesting level)
