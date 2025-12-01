@@ -363,7 +363,7 @@
       try {
         var attrs = (gb.getAttributes ? gb.getAttributes() : (window.GROWTHBOOK_CONFIG && window.GROWTHBOOK_CONFIG.attributes)) || {};
         console.log('[GB] Attributes:', attrs);
-        var featureKeys = ['image-format', 'hide-announcement-banner', 'mobile-logo-width', 'small-image-tiles', 'product-title-font-size', 'cart-label'];
+        var featureKeys = ['show-product-video', 'image-format', 'hide-announcement-banner', 'mobile-logo-width', 'small-image-tiles', 'product-title-font-size', 'cart-label'];
 
         // Collect all flags and values first, then log them all at once
         var flagsAndValues = {};
