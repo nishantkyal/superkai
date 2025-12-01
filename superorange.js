@@ -267,6 +267,50 @@
     if (value) document.querySelector('#x-announcement').style.display = 'none';
   }
 
+  function handleProductVideo(value) {
+    console.log("[GB] 'product-video' => value:", value);
+    if (value === 'false') {
+      var indicesToRemove = [];
+      // Find all .product-media-container that contain a button with aria-label="Image zoom"
+      // Exclude containers inside #QuickView (at any nesting level)
+      // Select divs within .product-media-container where x-ref is not 'thumbnail'
+      var productMediaContainers = document.querySelectorAll('.product-media-container');
+      for (var i = 0; i < productMediaContainers.length; i++) {
+        var container = productMediaContainers[i];
+        // Skip if container or any ancestor is #QuickView
+        if (container.closest('#QuickView')) {
+          continue;
+        }
+        var mediaElements = container.querySelectorAll('button[aria-label="Image zoom"] img,video');
+        if (mediaElements.length > 0) {
+          // Collect images and their indices
+          for (var j = 0; j < mediaElements.length; j++) {
+            var element = mediaElements[j];
+            var shouldKeep;
+            // If element is not a video, always keep it
+            if (element.tagName.toLowerCase() !== 'video') {
+              shouldKeep = true;
+            } else {
+              // For videos, apply the filtering logic
+              shouldKeep = false;
+            }
+            if (!shouldKeep) {
+              indicesToRemove.push(j);
+            }
+          }
+          // don't remove all images
+          if (indicesToRemove.length == mediaElements.length) {
+            indicesToRemove = [];
+          }
+          // Only process the first container that matches
+          break;
+        }
+      }
+      hideFromThumbnails(indicesToRemove);
+      removeFromMainGallery(indicesToRemove);
+      hideFromZoomedView(indicesToRemove);
+    }
+  }
 
 
   // Handler for other flags - add more handlers here as needed
@@ -355,6 +399,9 @@
               break;
             case 'cart-label':
               handleCartLabel(value);
+              break;
+            case 'show-product-video':
+              handleProductVideo(value);
               break;
             default:
               handleDefault(flagKey, value);
